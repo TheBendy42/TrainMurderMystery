@@ -6,29 +6,41 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(KeyBinding.class)
 public abstract class KeyBindingMixin {
-
     @Shadow
     public abstract boolean equals(KeyBinding other);
 
-    @ModifyReturnValue(method = "wasPressed", at = @At("RETURN"))
-    private boolean tmm$restrainKeys(boolean original) {
+    @Unique
+    private boolean shouldSuppressKey() {
         if (TrainMurderMysteryClient.shouldRestrictPlayerOptions()) {
-            if (this.equals(MinecraftClient.getInstance().options.swapHandsKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.inventoryKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.dropKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.chatKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.commandKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.jumpKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.playerListKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.togglePerspectiveKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.sprintKey)) return false;
-            if (this.equals(MinecraftClient.getInstance().options.advancementsKey)) return false;
+            return this.equals(MinecraftClient.getInstance().options.swapHandsKey) ||
+                    this.equals(MinecraftClient.getInstance().options.inventoryKey) ||
+                    this.equals(MinecraftClient.getInstance().options.dropKey) ||
+                    this.equals(MinecraftClient.getInstance().options.chatKey) ||
+                    this.equals(MinecraftClient.getInstance().options.commandKey) ||
+                    this.equals(MinecraftClient.getInstance().options.jumpKey) ||
+                    this.equals(MinecraftClient.getInstance().options.playerListKey) ||
+                    this.equals(MinecraftClient.getInstance().options.togglePerspectiveKey) ||
+                    this.equals(MinecraftClient.getInstance().options.sprintKey) ||
+                    this.equals(MinecraftClient.getInstance().options.advancementsKey);
         }
+        return false;
+    }
 
-        return original;
+    @ModifyReturnValue(method = "wasPressed", at = @At("RETURN"))
+    private boolean tmm$restrainWasPressedKeys(boolean original) {
+        if (shouldSuppressKey()) return false; else return original;
+    }
+
+    @ModifyReturnValue(method = "isPressed", at = @At("RETURN"))
+    private boolean tmm$restrainIsPressedKeys(boolean original) {
+        if (shouldSuppressKey()) return false; else return original;
     }
 }

@@ -172,6 +172,6 @@ public class TrainMurderMysteryClient implements ClientModInitializer {
 
     public static boolean shouldRestrictPlayerOptions() {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        return !player.isSpectator() && !player.isCreative();
+        return player != null && !player.isSpectator() && !player.isCreative();
     }
 }
