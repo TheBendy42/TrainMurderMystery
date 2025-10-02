@@ -129,8 +129,6 @@ public class RoundTextRenderer {
         }
         var options = MinecraftClient.getInstance().options;
         if (options != null && options.playerListKey.isPressed()) endTime = Math.max(2, endTime);
-        var player = MinecraftClient.getInstance().player;
-        if (player != null) player.sendMessage(Text.literal("endTime: " + endTime), true);
     }
 
     public static void startWelcome(RoleAnnouncementText role, int killers, int targets) {
