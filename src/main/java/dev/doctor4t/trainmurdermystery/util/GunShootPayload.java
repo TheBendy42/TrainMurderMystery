@@ -3,7 +3,6 @@ package dev.doctor4t.trainmurdermystery.util;
 import dev.doctor4t.trainmurdermystery.TMM;
 import dev.doctor4t.trainmurdermystery.cca.GameWorldComponent;
 import dev.doctor4t.trainmurdermystery.cca.PlayerMoodComponent;
-import dev.doctor4t.trainmurdermystery.event.AllowPlayerShotDeath;
 import dev.doctor4t.trainmurdermystery.game.GameConstants;
 import dev.doctor4t.trainmurdermystery.game.GameFunctions;
 import dev.doctor4t.trainmurdermystery.index.TMMDataComponentTypes;
@@ -70,8 +69,7 @@ public record GunShootPayload(int target) implements CustomPayload {
                         PlayerMoodComponent.KEY.get(player).setMood(0);
                     }, 4);
                 }
-                if (AllowPlayerShotDeath.EVENT.invoker().allowShot(player))
-                    GameFunctions.killPlayer(target, true, player);
+                GameFunctions.killPlayer(target, true, player, TMM.id("gun_shot"));
             }
 
             player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), TMMSounds.ITEM_REVOLVER_SHOOT, SoundCategory.PLAYERS, 5f, 1f + player.getRandom().nextFloat() * .1f - .05f);

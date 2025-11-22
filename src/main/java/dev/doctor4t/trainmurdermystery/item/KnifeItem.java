@@ -1,6 +1,5 @@
 package dev.doctor4t.trainmurdermystery.item;
 
-import dev.doctor4t.trainmurdermystery.event.AllowPlayerStabDeath;
 import dev.doctor4t.trainmurdermystery.game.GameFunctions;
 import dev.doctor4t.trainmurdermystery.index.TMMSounds;
 import dev.doctor4t.trainmurdermystery.util.KnifeStabPayload;
